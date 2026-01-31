@@ -6,6 +6,9 @@
 // UART base address for QEMU virt machine
 #define UART_BASE 0x09000000
 
+// Kernel main declaration
+extern void kernel_main();
+
 // Main bootloader function
 void bootloader_main() {
     // Debug message
