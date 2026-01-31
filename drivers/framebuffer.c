@@ -8,14 +8,15 @@
 #define FB_SIZE (FB_WIDTH * FB_HEIGHT * (FB_BPP / 8))
 
 // Double buffering
-static uint32_t *front_buffer = (uint32_t *)FB_BASE;
-static uint32_t *back_buffer = (uint32_t *)(FB_BASE + FB_SIZE);
-
-// Current buffer
-static uint32_t *current_buffer = back_buffer;
+static uint32_t *front_buffer;
+static uint32_t *back_buffer;
+static uint32_t *current_buffer;
 
 // Initialize framebuffer
 void fb_init() {
+    front_buffer = (uint32_t *)FB_BASE;
+    back_buffer = (uint32_t *)(FB_BASE + FB_SIZE);
+    current_buffer = back_buffer;
     uart_puts("Initializing framebuffer...\n");
     // TODO: Set up virtio-gpu or memory mapping
     fb_clear(COLOR_BLACK);
