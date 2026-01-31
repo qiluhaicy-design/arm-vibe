@@ -3,6 +3,9 @@
 #ifndef VIRTIO_GPU_H
 #define VIRTIO_GPU_H
 
+// Define types for bare-metal
+typedef unsigned int uint32_t;
+
 // Function declarations
 void virtio_gpu_init();
 uint32_t *virtio_gpu_get_fb();
