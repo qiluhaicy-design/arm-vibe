@@ -64,7 +64,7 @@ $(BUILD_DIR)/kernel.elf: $(KERNEL_DIR)/kernel.c $(KERNEL_DIR)/memory.c $(KERNEL_
 # Run in QEMU ARM64 with virtio GPU
 run: build
 	@echo "Running vibeOS in QEMU ARM64 with virtio GPU..."
-	$(QEMU) -M virt -cpu cortex-a53 -kernel $(BUILD_DIR)/bootloader.elf -device virtio-gpu-pci -vga none -serial stdio
+	$(QEMU) -M virt -cpu cortex-a53 -kernel $(BUILD_DIR)/bootloader.elf -device virtio-gpu-pci -vga none -display vnc=localhost:5900 -serial stdio
 
 # Clean build artifacts
 clean:

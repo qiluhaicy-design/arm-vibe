@@ -19,4 +19,7 @@
 - `docs/` - Документация.
 
 ## Сборка и запуск
-(Будет добавлено позже)
+1. `make build` - Собрать ОС.
+2. `make run` - Запустить в QEMU ARM64 с VNC на localhost:5900.
+   - Подключитесь VNC viewer (например, `vncviewer localhost:5900`) для просмотра видео.
+   - Serial output в терминале.
