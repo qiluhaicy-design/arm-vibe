@@ -14,8 +14,10 @@ static uint32_t *current_buffer;
 
 // Initialize framebuffer
 void fb_init() {
-    front_buffer = (uint32_t *)FB_BASE;
-    back_buffer = (uint32_t *)(FB_BASE + FB_SIZE);
+    virtio_gpu_init();
+    gpu_fb = virtio_gpu_get_fb();
+    front_buffer = gpu_fb;
+    back_buffer = gpu_fb + (FB_WIDTH * FB_HEIGHT);
     current_buffer = back_buffer;
     uart_puts("Initializing framebuffer...\n");
     fb_clear(COLOR_BLACK);
