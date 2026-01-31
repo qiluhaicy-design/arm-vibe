@@ -1,4 +1,4 @@
-/* bootloader/linker.ld - Linker script for ARM64 bootloader */
+/* bootloader/linker.ld - Linker script for ARM64 bootloader with kernel */
 
 ENTRY(_start)
 

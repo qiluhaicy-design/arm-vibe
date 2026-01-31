@@ -22,15 +22,21 @@ all: build
 build: bootloader kernel
 	@echo "Building vibeOS complete."
 
-# Build bootloader
+# Build bootloader (including kernel)
 bootloader: $(BUILD_DIR)/bootloader.elf
 
-$(BUILD_DIR)/bootloader.elf: $(BOOTLOADER_DIR)/boot.S $(BOOTLOADER_DIR)/main.c $(BOOTLOADER_DIR)/linker.ld
-	@echo "Compiling bootloader..."
+$(BUILD_DIR)/bootloader.elf: $(BOOTLOADER_DIR)/boot.S $(BOOTLOADER_DIR)/main.c $(KERNEL_DIR)/kernel.c $(KERNEL_DIR)/memory.c $(KERNEL_DIR)/timer.c $(KERNEL_DIR)/interrupt.c $(KERNEL_DIR)/scheduler.c $(LIBS_DIR)/uart.c $(BOOTLOADER_DIR)/linker.ld
+	@echo "Compiling bootloader with kernel..."
 	mkdir -p $(BUILD_DIR)
 	$(CC) -c $(BOOTLOADER_DIR)/boot.S -o $(BUILD_DIR)/boot.o
 	$(CC) -c $(BOOTLOADER_DIR)/main.c -o $(BUILD_DIR)/main.o
-	$(LD) -T $(BOOTLOADER_DIR)/linker.ld $(BUILD_DIR)/boot.o $(BUILD_DIR)/main.o -o $(BUILD_DIR)/bootloader.elf
+	$(CC) -c $(KERNEL_DIR)/kernel.c -o $(BUILD_DIR)/kernel.o
+	$(CC) -c $(KERNEL_DIR)/memory.c -o $(BUILD_DIR)/memory.o
+	$(CC) -c $(KERNEL_DIR)/timer.c -o $(BUILD_DIR)/timer.o
+	$(CC) -c $(KERNEL_DIR)/interrupt.c -o $(BUILD_DIR)/interrupt.o
+	$(CC) -c $(KERNEL_DIR)/scheduler.c -o $(BUILD_DIR)/scheduler.o
+	$(CC) -c $(LIBS_DIR)/uart.c -o $(BUILD_DIR)/uart.o
+	$(LD) -T $(BOOTLOADER_DIR)/linker.ld $(BUILD_DIR)/boot.o $(BUILD_DIR)/main.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/memory.o $(BUILD_DIR)/timer.o $(BUILD_DIR)/interrupt.o $(BUILD_DIR)/scheduler.o $(BUILD_DIR)/uart.o -o $(BUILD_DIR)/bootloader.elf
 
 # Build kernel
 kernel: $(BUILD_DIR)/kernel.elf
