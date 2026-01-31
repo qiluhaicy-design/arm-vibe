@@ -20,6 +20,6 @@
 
 ## Сборка и запуск
 1. `make build` - Собрать ОС.
-2. `make run` - Запустить в QEMU ARM64 с VNC на localhost:5900.
-   - Подключитесь VNC viewer (например, `vncviewer localhost:5900`) для просмотра видео.
+2. `make run` - Запустить в QEMU ARM64 с графическим экраном.
+   - QEMU откроет окно с framebuffer.
    - Serial output в терминале.

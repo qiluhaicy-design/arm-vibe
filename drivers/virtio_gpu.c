@@ -3,7 +3,7 @@
 #include "virtio.h"
 #include "../libs/uart.h"
 
-// Virtio GPU base address (placeholder for PCI)
+// Virtio GPU base address (MMIO for device)
 #define VIRTIO_GPU_BASE 0x0a000000
 
 // GPU control registers
@@ -32,13 +32,24 @@ static uint32_t *gpu_fb_addr = 0;
 // Initialize virtio GPU
 void virtio_gpu_init() {
     uart_puts("Initializing virtio GPU...\n");
-    // TODO: PCI discovery, setup queues, get display info, set scanout
+    // TODO: Full virtio init (queues, features)
     // For now, assume FB at 0x80000000
     gpu_fb_addr = (uint32_t *)0x80000000;
+    // Set scanout to activate display
+    virtio_gpu_set_scanout(1024, 768);
     uart_puts("Virtio GPU initialized\n");
 }
 
 // Get framebuffer address
 uint32_t *virtio_gpu_get_fb() {
     return gpu_fb_addr;
+}
+
+// Set scanout (placeholder for activating display)
+void virtio_gpu_set_scanout(uint32_t width, uint32_t height) {
+    // Placeholder: Send VIRTIO_GPU_CMD_SET_SCANOUT command
+    // In real impl: Prepare command struct, send via queue
+    uart_puts("Setting scanout to 1024x768...\n");
+    // Simulate: Write to MMIO (not real, but for placeholder)
+    // TODO: Implement full virtio command sending
 }
