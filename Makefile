@@ -11,6 +11,7 @@ BUILD_DIR = build
 BOOTLOADER_DIR = bootloader
 KERNEL_DIR = kernel
 LIBS_DIR = libs
+DRIVERS_DIR = drivers
 
 # Targets
 .PHONY: all build bootloader kernel run clean
@@ -25,7 +26,7 @@ build: bootloader kernel
 # Build bootloader (including kernel)
 bootloader: $(BUILD_DIR)/bootloader.elf
 
-$(BUILD_DIR)/bootloader.elf: $(BOOTLOADER_DIR)/boot.S $(BOOTLOADER_DIR)/main.c $(KERNEL_DIR)/kernel.c $(KERNEL_DIR)/memory.c $(KERNEL_DIR)/timer.c $(KERNEL_DIR)/interrupt.c $(KERNEL_DIR)/scheduler.c $(LIBS_DIR)/uart.c $(BOOTLOADER_DIR)/linker.ld
+$(BUILD_DIR)/bootloader.elf: $(BOOTLOADER_DIR)/boot.S $(BOOTLOADER_DIR)/main.c $(KERNEL_DIR)/kernel.c $(KERNEL_DIR)/memory.c $(KERNEL_DIR)/timer.c $(KERNEL_DIR)/interrupt.c $(KERNEL_DIR)/scheduler.c $(LIBS_DIR)/uart.c $(DRIVERS_DIR)/framebuffer.c $(BOOTLOADER_DIR)/linker.ld
 	@echo "Compiling bootloader with kernel..."
 	mkdir -p $(BUILD_DIR)
 	$(CC) -c $(BOOTLOADER_DIR)/boot.S -o $(BUILD_DIR)/boot.o
@@ -36,7 +37,8 @@ $(BUILD_DIR)/bootloader.elf: $(BOOTLOADER_DIR)/boot.S $(BOOTLOADER_DIR)/main.c $
 	$(CC) -c $(KERNEL_DIR)/interrupt.c -o $(BUILD_DIR)/interrupt.o
 	$(CC) -c $(KERNEL_DIR)/scheduler.c -o $(BUILD_DIR)/scheduler.o
 	$(CC) -c $(LIBS_DIR)/uart.c -o $(BUILD_DIR)/uart.o
-	$(LD) -T $(BOOTLOADER_DIR)/linker.ld $(BUILD_DIR)/boot.o $(BUILD_DIR)/main.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/memory.o $(BUILD_DIR)/timer.o $(BUILD_DIR)/interrupt.o $(BUILD_DIR)/scheduler.o $(BUILD_DIR)/uart.o -o $(BUILD_DIR)/bootloader.elf
+	$(CC) -c $(DRIVERS_DIR)/framebuffer.c -o $(BUILD_DIR)/framebuffer.o
+	$(LD) -T $(BOOTLOADER_DIR)/linker.ld $(BUILD_DIR)/boot.o $(BUILD_DIR)/main.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/memory.o $(BUILD_DIR)/timer.o $(BUILD_DIR)/interrupt.o $(BUILD_DIR)/scheduler.o $(BUILD_DIR)/uart.o $(BUILD_DIR)/framebuffer.o -o $(BUILD_DIR)/bootloader.elf
 
 # Build kernel
 kernel: $(BUILD_DIR)/kernel.elf

@@ -22,8 +22,8 @@ sleep 5
 kill $QEMU_PID 2>/dev/null
 
 # Check output for debug messages
-if grep -q "vibeOS Bootloader started" test_output.log && grep -q "vibeOS Kernel started" test_output.log; then
-    echo "✓ Bootloader and kernel debug messages found"
+if grep -q "vibeOS Bootloader started" test_output.log && grep -q "vibeOS Kernel started" test_output.log && grep -q "Drawing text: vibeOS Test Screen" test_output.log; then
+    echo "✓ Bootloader, kernel and framebuffer test messages found"
 else
     echo "✗ Debug messages not found"
     cat test_output.log
