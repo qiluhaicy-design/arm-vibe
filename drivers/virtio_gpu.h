@@ -11,7 +11,7 @@ typedef unsigned long long uint64_t;
 typedef struct {
     uint32_t type;
     uint32_t flags;
-    uint64_t fence_id;
+    uint32_t fence_id; // simplified to uint32_t
     uint32_t ctx_id;
     uint32_t padding;
 } virtio_gpu_ctrl_hdr;
