@@ -55,7 +55,7 @@ uint32_t *virtio_gpu_get_fb() {
 
 // Set scanout
 void virtio_gpu_set_scanout(uint32_t width, uint32_t height) {
-    virtio_gpu_set_scanout cmd = {
+    virtio_gpu_cmd_set_scanout cmd = {
         .hdr = { .type = VIRTIO_GPU_CMD_SET_SCANOUT, .flags = 0, .fence_id = 0, .ctx_id = 0, .padding = 0 },
         .r_x = 0, .r_y = 0, .r_width = width, .r_height = height,
         .scanout_id = 0, .resource_id = 0

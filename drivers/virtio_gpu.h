@@ -22,7 +22,7 @@ typedef struct {
     uint32_t r_x, r_y, r_width, r_height;
     uint32_t scanout_id;
     uint32_t resource_id;
-} virtio_gpu_set_scanout;
+} virtio_gpu_cmd_set_scanout;
 
 // Function declarations
 void virtio_gpu_init();
