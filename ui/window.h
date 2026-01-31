@@ -3,7 +3,8 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include <stdint.h>
+// Define types for bare-metal
+typedef unsigned int uint32_t;
 
 // Window structure
 typedef struct {
