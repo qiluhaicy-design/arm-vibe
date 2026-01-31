@@ -1,11 +1,7 @@
 // drivers/framebuffer.c - Framebuffer driver for vibeOS
 
 #include "framebuffer.h"
-#include "virtio_gpu.h"
 #include "../libs/uart.h"
-
-// Framebuffer from virtio GPU
-static uint32_t *gpu_fb = 0;
 
 // Double buffering (placeholder)
 static uint32_t *front_buffer;
@@ -14,10 +10,8 @@ static uint32_t *current_buffer;
 
 // Initialize framebuffer
 void fb_init() {
-    virtio_gpu_init();
-    gpu_fb = virtio_gpu_get_fb();
-    front_buffer = gpu_fb;
-    back_buffer = gpu_fb + (FB_WIDTH * FB_HEIGHT);
+    front_buffer = (uint32_t *)FB_BASE;
+    back_buffer = (uint32_t *)(FB_BASE + FB_SIZE);
     current_buffer = back_buffer;
     uart_puts("Initializing framebuffer...\n");
     fb_clear(COLOR_BLACK);

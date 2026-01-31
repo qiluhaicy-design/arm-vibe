@@ -11,7 +11,8 @@ typedef unsigned int uint32_t;
 #define FB_HEIGHT 768
 #define FB_BPP 32  // Bits per pixel
 
-// Framebuffer size
+// Framebuffer base address and size (for QEMU ramfb at 0x80000000)
+#define FB_BASE 0x80000000
 #define FB_SIZE (FB_WIDTH * FB_HEIGHT * (FB_BPP / 8))  // 1024*768*4 = 3MB
 
 // Colors
