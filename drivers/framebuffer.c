@@ -1,25 +1,26 @@
 // drivers/framebuffer.c - Framebuffer driver for vibeOS
 
 #include "framebuffer.h"
+#include "virtio_gpu.h"
 #include "../libs/uart.h"
 
-// Framebuffer base address (placeholder for QEMU virt)
-#define FB_BASE 0x50000000
-#define FB_SIZE (FB_WIDTH * FB_HEIGHT * (FB_BPP / 8))
+// Framebuffer from virtio GPU
+static uint32_t *gpu_fb = 0;
 
-// Double buffering
+// Double buffering (placeholder)
 static uint32_t *front_buffer;
 static uint32_t *back_buffer;
 static uint32_t *current_buffer;
 
 // Initialize framebuffer
 void fb_init() {
-    front_buffer = (uint32_t *)FB_BASE;
-    back_buffer = (uint32_t *)(FB_BASE + FB_SIZE);
-    current_buffer = back_buffer;
     uart_puts("Initializing framebuffer...\n");
-    // TODO: Set up virtio-gpu or memory mapping
-    // fb_clear(COLOR_BLACK);  // Skip for now to avoid memory issues
+    virtio_gpu_init();
+    gpu_fb = virtio_gpu_get_fb();
+    front_buffer = gpu_fb;
+    back_buffer = gpu_fb + (FB_WIDTH * FB_HEIGHT);
+    current_buffer = back_buffer;
+    fb_clear(COLOR_BLACK);
     uart_puts("Framebuffer initialized\n");
 }
 
