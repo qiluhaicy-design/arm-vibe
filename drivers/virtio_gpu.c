@@ -5,7 +5,7 @@
 #include "../libs/uart.h"
 
 // Virtio GPU base address (from PCI BAR)
-static uint32_t virtio_gpu_base = 0;
+static uint64_t virtio_gpu_base = 0;
 
 // GPU control registers
 #define VIRTIO_GPU_DEVICE_FEATURES 0x00
@@ -43,7 +43,8 @@ void virtio_gpu_init() {
     uint32_t dev = pci_addr & 0xFF;
     virtio_gpu_base = pci_get_bar(bus, dev, 0, 0) & ~0xF; // BAR0, mask flags
     uart_puts("Virtio GPU base: ");
-    // (placeholder for hex print)
+    uart_puthex((uint32_t)virtio_gpu_base);
+    uart_puts("\n");
     // Basic virtio init
     *(volatile uint32_t *)(virtio_gpu_base + VIRTIO_GPU_DEVICE_STATUS) = 0x0F;
     *(volatile uint32_t *)(virtio_gpu_base + VIRTIO_GPU_QUEUE_SELECT) = 0;

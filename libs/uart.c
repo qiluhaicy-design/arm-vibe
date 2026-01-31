@@ -18,3 +18,15 @@ void uart_puts(const char *s) {
         uart_putc(*s++);
     }
 }
+
+// Function to print hex value
+void uart_puthex(uint32_t val) {
+    char buf[9];
+    buf[8] = '\0';
+    for (int i = 7; i >= 0; i--) {
+        uint8_t digit = val & 0xF;
+        buf[i] = digit < 10 ? '0' + digit : 'A' + digit - 10;
+        val >>= 4;
+    }
+    uart_puts(buf);
+}

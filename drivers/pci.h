@@ -5,6 +5,7 @@
 
 // Define types for bare-metal
 typedef unsigned int uint32_t;
+typedef unsigned long long uint64_t;
 
 // PCI config space
 #define PCI_CONFIG_ADDR 0xCF8
@@ -17,6 +18,6 @@ typedef unsigned int uint32_t;
 // Function declarations
 uint32_t pci_read_config(uint32_t bus, uint32_t dev, uint32_t func, uint32_t reg);
 uint32_t pci_find_device(uint32_t vendor, uint32_t device);
-uint32_t pci_get_bar(uint32_t bus, uint32_t dev, uint32_t func, uint32_t bar);
+uint64_t pci_get_bar(uint32_t bus, uint32_t dev, uint32_t func, uint32_t bar);
 
 #endif
