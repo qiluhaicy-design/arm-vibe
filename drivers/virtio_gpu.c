@@ -1,5 +1,6 @@
 // drivers/virtio_gpu.c - Virtio GPU driver for vibeOS
 
+#include "virtio_gpu.h"
 #include "virtio.h"
 #include "../libs/uart.h"
 
