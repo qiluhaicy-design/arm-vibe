@@ -21,5 +21,5 @@
 ## Сборка и запуск
 1. `make build` - Собрать ОС.
 2. `make run` - Запустить в QEMU ARM64 с графическим экраном.
-   - QEMU откроет окно с framebuffer.
+   - QEMU откроет окно с framebuffer (требует GUI среды).
    - Serial output в терминале.

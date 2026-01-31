@@ -43,6 +43,10 @@ void virtio_gpu_init() {
     *(volatile uint32_t *)(VIRTIO_GPU_BASE + VIRTIO_GPU_QUEUE_ADDRESS) = 0x80010000 >> 12;
     // Get display info
     virtio_gpu_get_display_info();
+    // Create resource
+    virtio_gpu_create_resource(1, 1024, 768);
+    // Attach backing
+    virtio_gpu_attach_backing(1);
     // For now, assume FB at 0x80000000
     gpu_fb_addr = (uint32_t *)0x80000000;
     // Set scanout to activate display
@@ -68,7 +72,7 @@ void virtio_gpu_set_scanout(uint32_t width, uint32_t height) {
     cmd.r_width = width;
     cmd.r_height = height;
     cmd.scanout_id = 0;
-    cmd.resource_id = 0;
+    cmd.resource_id = 1; // Use created resource
     virtio_gpu_send_command(&cmd, sizeof(cmd));
 }
 
@@ -89,5 +93,36 @@ void virtio_gpu_get_display_info() {
     cmd.hdr.fence_id = 0;
     cmd.hdr.ctx_id = 0;
     cmd.hdr.padding = 0;
+    virtio_gpu_send_command(&cmd, sizeof(cmd));
+}
+
+// Create 2D resource
+void virtio_gpu_create_resource(uint32_t id, uint32_t width, uint32_t height) {
+    struct virtio_gpu_resource_create_2d cmd;
+    cmd.hdr.type = VIRTIO_GPU_CMD_RESOURCE_CREATE_2D;
+    cmd.hdr.flags = 0;
+    cmd.hdr.fence_id = 0;
+    cmd.hdr.ctx_id = 0;
+    cmd.hdr.padding = 0;
+    cmd.resource_id = id;
+    cmd.format = 1; // BGRA
+    cmd.width = width;
+    cmd.height = height;
+    virtio_gpu_send_command(&cmd, sizeof(cmd));
+}
+
+// Attach backing
+void virtio_gpu_attach_backing(uint32_t id) {
+    struct virtio_gpu_resource_attach_backing cmd;
+    cmd.hdr.type = VIRTIO_GPU_CMD_RESOURCE_ATTACH_BACKING;
+    cmd.hdr.flags = 0;
+    cmd.hdr.fence_id = 0;
+    cmd.hdr.ctx_id = 0;
+    cmd.hdr.padding = 0;
+    cmd.resource_id = id;
+    cmd.nr_entries = 1;
+    cmd.entry[0].addr = 0x80000000ULL; // FB addr
+    cmd.entry[0].length = 1024 * 768 * 4;
+    cmd.entry[0].padding = 0;
     virtio_gpu_send_command(&cmd, sizeof(cmd));
 }

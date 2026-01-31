@@ -39,11 +39,34 @@ struct virtio_gpu_resp_display_info {
     } pmodes[16];
 };
 
+// Create 2D resource command
+struct virtio_gpu_resource_create_2d {
+    struct virtio_gpu_ctrl_hdr hdr;
+    uint32_t resource_id;
+    uint32_t format;
+    uint32_t width;
+    uint32_t height;
+};
+
+// Attach backing command
+struct virtio_gpu_resource_attach_backing {
+    struct virtio_gpu_ctrl_hdr hdr;
+    uint32_t resource_id;
+    uint32_t nr_entries;
+    struct {
+        uint64_t addr;
+        uint32_t length;
+        uint32_t padding;
+    } entry[1];
+};
+
 // Function declarations
 void virtio_gpu_init();
 uint32_t *virtio_gpu_get_fb();
 void virtio_gpu_set_scanout(uint32_t width, uint32_t height);
 void virtio_gpu_send_command(void *cmd, uint32_t size);
 void virtio_gpu_get_display_info();
+void virtio_gpu_create_resource(uint32_t id, uint32_t width, uint32_t height);
+void virtio_gpu_attach_backing(uint32_t id);
 
 #endif
