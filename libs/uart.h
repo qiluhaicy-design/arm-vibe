@@ -3,6 +3,10 @@
 #ifndef UART_H
 #define UART_H
 
+// Define types for bare-metal
+typedef unsigned char uint8_t;
+typedef unsigned int uint32_t;
+
 // Function declarations
 void uart_putc(char c);
 void uart_puts(const char *s);
