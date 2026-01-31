@@ -33,6 +33,8 @@ void kernel_main() {
     // Test screen
     test_screen();
 
+    uart_puts("Test screen done\n");
+
     // Start scheduler
     scheduler_start();
 
