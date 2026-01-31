@@ -1,8 +1,8 @@
 #!/bin/bash
-# Test script for vibeOS bootloader
+# Test script for vibeOS bootloader and kernel
 # Builds and runs in QEMU, checks for debug output
 
-echo "Testing vibeOS bootloader in QEMU..."
+echo "Testing vibeOS bootloader and kernel in QEMU..."
 
 # Build
 make build
@@ -22,13 +22,13 @@ sleep 5
 kill $QEMU_PID 2>/dev/null
 
 # Check output for debug messages
-if grep -q "vibeOS Bootloader started" test_output.log; then
-    echo "✓ Bootloader debug message found"
+if grep -q "vibeOS Bootloader started" test_output.log && grep -q "vibeOS Kernel started" test_output.log; then
+    echo "✓ Bootloader and kernel debug messages found"
 else
-    echo "✗ Bootloader debug message not found"
+    echo "✗ Debug messages not found"
     cat test_output.log
     exit 1
 fi
 
-echo "Bootloader test passed."
+echo "Bootloader and kernel test passed."
 rm test_output.log

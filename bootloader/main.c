@@ -35,7 +35,9 @@ void bootloader_main() {
 
     // Transfer control to kernel
     uart_puts("Transferring control to kernel...\n");
-    // TODO: Jump to kernel entry
+    // Jump to kernel entry
+    void (*kernel_entry)() = (void (*)())0x40080000;  // Kernel load address
+    kernel_entry();
 
     // Infinite loop if kernel fails
     while (1) {

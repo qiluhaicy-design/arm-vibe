@@ -10,15 +10,16 @@ QEMU = qemu-system-aarch64
 BUILD_DIR = build
 BOOTLOADER_DIR = bootloader
 KERNEL_DIR = kernel
+LIBS_DIR = libs
 
 # Targets
-.PHONY: all build bootloader run clean
+.PHONY: all build bootloader kernel run clean
 
 # Default target
 all: build
 
 # Build the OS
-build: bootloader
+build: bootloader kernel
 	@echo "Building vibeOS complete."
 
 # Build bootloader
@@ -30,6 +31,19 @@ $(BUILD_DIR)/bootloader.elf: $(BOOTLOADER_DIR)/boot.S $(BOOTLOADER_DIR)/main.c $
 	$(CC) -c $(BOOTLOADER_DIR)/boot.S -o $(BUILD_DIR)/boot.o
 	$(CC) -c $(BOOTLOADER_DIR)/main.c -o $(BUILD_DIR)/main.o
 	$(LD) -T $(BOOTLOADER_DIR)/linker.ld $(BUILD_DIR)/boot.o $(BUILD_DIR)/main.o -o $(BUILD_DIR)/bootloader.elf
+
+# Build kernel
+kernel: $(BUILD_DIR)/kernel.elf
+
+$(BUILD_DIR)/kernel.elf: $(KERNEL_DIR)/kernel.c $(KERNEL_DIR)/memory.c $(KERNEL_DIR)/timer.c $(KERNEL_DIR)/interrupt.c $(KERNEL_DIR)/scheduler.c $(LIBS_DIR)/uart.c $(KERNEL_DIR)/linker.ld
+	@echo "Compiling kernel..."
+	$(CC) -c $(KERNEL_DIR)/kernel.c -o $(BUILD_DIR)/kernel.o
+	$(CC) -c $(KERNEL_DIR)/memory.c -o $(BUILD_DIR)/memory.o
+	$(CC) -c $(KERNEL_DIR)/timer.c -o $(BUILD_DIR)/timer.o
+	$(CC) -c $(KERNEL_DIR)/interrupt.c -o $(BUILD_DIR)/interrupt.o
+	$(CC) -c $(KERNEL_DIR)/scheduler.c -o $(BUILD_DIR)/scheduler.o
+	$(CC) -c $(LIBS_DIR)/uart.c -o $(BUILD_DIR)/uart.o
+	$(LD) -T $(KERNEL_DIR)/linker.ld $(BUILD_DIR)/kernel.o $(BUILD_DIR)/memory.o $(BUILD_DIR)/timer.o $(BUILD_DIR)/interrupt.o $(BUILD_DIR)/scheduler.o $(BUILD_DIR)/uart.o -o $(BUILD_DIR)/kernel.elf
 
 # Run in QEMU ARM64
 run: build
