@@ -2,6 +2,13 @@
 
 #include "../libs/uart.h"
 
+// Function declarations
+extern void memory_init();
+extern void timer_init();
+extern void interrupt_init();
+extern void scheduler_init();
+extern void scheduler_start();
+
 // Kernel main function
 void kernel_main() {
     uart_puts("vibeOS Kernel started\n");
