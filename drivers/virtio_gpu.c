@@ -41,6 +41,8 @@ void virtio_gpu_init() {
     *(volatile uint32_t *)(VIRTIO_GPU_BASE + VIRTIO_GPU_QUEUE_SIZE) = 256; // placeholder
     // Set queue addr (placeholder, assume 0x80010000)
     *(volatile uint32_t *)(VIRTIO_GPU_BASE + VIRTIO_GPU_QUEUE_ADDRESS) = 0x80010000 >> 12;
+    // Get display info
+    virtio_gpu_get_display_info();
     // For now, assume FB at 0x80000000
     gpu_fb_addr = (uint32_t *)0x80000000;
     // Set scanout to activate display
@@ -70,4 +72,12 @@ void virtio_gpu_send_command(void *cmd, uint32_t size) {
     uart_puts("Sending virtio GPU command...\n");
     // Simulate notify
     *(volatile uint32_t *)(VIRTIO_GPU_BASE + VIRTIO_GPU_QUEUE_NOTIFY) = 0;
+}
+
+// Get display info
+void virtio_gpu_get_display_info() {
+    virtio_gpu_get_display_info cmd = {
+        .hdr = { .type = VIRTIO_GPU_CMD_GET_DISPLAY_INFO, .flags = 0, .fence_id = 0, .ctx_id = 0, .padding = 0 }
+    };
+    virtio_gpu_send_command(&cmd, sizeof(cmd));
 }
