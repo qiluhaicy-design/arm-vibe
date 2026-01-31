@@ -1,11 +1,11 @@
 // drivers/virtio_gpu.c - Virtio GPU driver for vibeOS
 
 #include "virtio_gpu.h"
-#include "virtio.h"
+#include "pci.h"
 #include "../libs/uart.h"
 
-// Virtio GPU base address (MMIO for device)
-#define VIRTIO_GPU_BASE 0x0a000000
+// Virtio GPU base address (from PCI BAR)
+static uint32_t virtio_gpu_base = 0;
 
 // GPU control registers
 #define VIRTIO_GPU_DEVICE_FEATURES 0x00
@@ -33,23 +33,31 @@ static uint32_t *gpu_fb_addr = 0;
 // Initialize virtio GPU
 void virtio_gpu_init() {
     uart_puts("Initializing virtio GPU...\n");
-    // Basic virtio init (placeholder)
-    // Set device status to ACKNOWLEDGE | DRIVER | FEATURES_OK | DRIVER_OK
-    *(volatile uint32_t *)(VIRTIO_GPU_BASE + VIRTIO_GPU_DEVICE_STATUS) = 0x0F;
-    // Assume queue 0 for control
-    *(volatile uint32_t *)(VIRTIO_GPU_BASE + VIRTIO_GPU_QUEUE_SELECT) = 0;
-    *(volatile uint32_t *)(VIRTIO_GPU_BASE + VIRTIO_GPU_QUEUE_SIZE) = 256; // placeholder
-    // Set queue addr (placeholder, assume 0x80010000)
-    *(volatile uint32_t *)(VIRTIO_GPU_BASE + VIRTIO_GPU_QUEUE_ADDRESS) = 0x80010000 >> 12;
+    // Find PCI device
+    uint32_t pci_addr = pci_find_device(VIRTIO_GPU_VENDOR, VIRTIO_GPU_DEVICE);
+    if (pci_addr == 0xFFFFFFFF) {
+        uart_puts("Virtio GPU not found\n");
+        return;
+    }
+    uint32_t bus = pci_addr >> 8;
+    uint32_t dev = pci_addr & 0xFF;
+    virtio_gpu_base = pci_get_bar(bus, dev, 0, 0) & ~0xF; // BAR0, mask flags
+    uart_puts("Virtio GPU base: ");
+    // (placeholder for hex print)
+    // Basic virtio init
+    *(volatile uint32_t *)(virtio_gpu_base + VIRTIO_GPU_DEVICE_STATUS) = 0x0F;
+    *(volatile uint32_t *)(virtio_gpu_base + VIRTIO_GPU_QUEUE_SELECT) = 0;
+    *(volatile uint32_t *)(virtio_gpu_base + VIRTIO_GPU_QUEUE_SIZE) = 256;
+    *(volatile uint32_t *)(virtio_gpu_base + VIRTIO_GPU_QUEUE_ADDRESS) = 0x80010000 >> 12;
     // Get display info
     virtio_gpu_get_display_info();
     // Create resource
     virtio_gpu_create_resource(1, 1024, 768);
     // Attach backing
     virtio_gpu_attach_backing(1);
-    // For now, assume FB at 0x80000000
+    // Assume FB at 0x80000000
     gpu_fb_addr = (uint32_t *)0x80000000;
-    // Set scanout to activate display
+    // Set scanout
     virtio_gpu_set_scanout(1024, 768);
     uart_puts("Virtio GPU initialized\n");
 }
@@ -78,11 +86,11 @@ void virtio_gpu_set_scanout(uint32_t width, uint32_t height) {
 
 // Send command (placeholder)
 void virtio_gpu_send_command(void *cmd, uint32_t size) {
-    // Placeholder: Copy to queue, notify
-    // In real: Add to virtqueue, set avail, notify
+    // Placeholder: notify
     uart_puts("Sending virtio GPU command...\n");
-    // Simulate notify
-    *(volatile uint32_t *)(VIRTIO_GPU_BASE + VIRTIO_GPU_QUEUE_NOTIFY) = 0;
+    if (virtio_gpu_base) {
+        *(volatile uint32_t *)(virtio_gpu_base + VIRTIO_GPU_QUEUE_NOTIFY) = 0;
+    }
 }
 
 // Get display info
