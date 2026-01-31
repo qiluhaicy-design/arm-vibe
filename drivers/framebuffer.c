@@ -27,6 +27,9 @@ void fb_init() {
 void fb_put_pixel(int x, int y, uint32_t color) {
     if (x >= 0 && x < FB_WIDTH && y >= 0 && y < FB_HEIGHT) {
         current_buffer[y * FB_WIDTH + x] = color;
+        // Debug: show pixel draw
+        // uart_puts("Pixel at ");
+        // (placeholder for int to string)
     }
 }
 
