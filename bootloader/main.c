@@ -1,7 +1,9 @@
 // bootloader/main.c - Main bootloader code for vibeOS ARM64
 // Initializes CPU, loads kernel, transfers control
 
-#include <stdint.h>
+// Define types for bare-metal
+typedef unsigned char uint8_t;
+typedef unsigned int uint32_t;
 
 // UART base address for QEMU virt machine
 #define UART_BASE 0x09000000
