@@ -14,6 +14,9 @@ typedef struct Task {
     uint32_t state;           // 0 = ready, 1 = running
 } Task;
 
+// Extern declarations
+extern Task *task_list;
+
 // Function declarations
 void task_init();
 Task *create_task(void (*entry)(void), uint32_t *stack, uint32_t stack_size);

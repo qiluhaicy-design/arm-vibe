@@ -7,7 +7,7 @@
 static Task *current_task = 0;
 
 // Task list head
-static Task *task_list = 0;
+Task *task_list = 0;
 
 // Initialize task system
 void task_init() {
