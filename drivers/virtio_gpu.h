@@ -5,6 +5,7 @@
 
 // Define types for bare-metal
 typedef unsigned int uint32_t;
+typedef unsigned long long uint64_t;
 
 // Virtio GPU command header
 struct virtio_gpu_ctrl_hdr {
