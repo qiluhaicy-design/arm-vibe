@@ -57,7 +57,7 @@ uint32_t *virtio_gpu_get_fb() {
 
 // Set scanout
 void virtio_gpu_set_scanout(uint32_t width, uint32_t height) {
-    virtio_gpu_cmd_set_scanout cmd;
+    struct virtio_gpu_cmd_set_scanout cmd;
     cmd.hdr.type = VIRTIO_GPU_CMD_SET_SCANOUT;
     cmd.hdr.flags = 0;
     cmd.hdr.fence_id = 0;
@@ -83,7 +83,7 @@ void virtio_gpu_send_command(void *cmd, uint32_t size) {
 
 // Get display info
 void virtio_gpu_get_display_info() {
-    virtio_gpu_cmd_get_display_info cmd;
+    struct virtio_gpu_cmd_get_display_info cmd;
     cmd.hdr.type = VIRTIO_GPU_CMD_GET_DISPLAY_INFO;
     cmd.hdr.flags = 0;
     cmd.hdr.fence_id = 0;
