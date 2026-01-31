@@ -3,12 +3,12 @@
 #include "pci.h"
 #include "../libs/uart.h"
 
-// ECAM base for QEMU virt
-#define ECAM_BASE 0x30000000
+// ECAM base for QEMU virt (actually legacy MMIO config)
+#define PCI_CONFIG_BASE 0x3f000000
 
 // Read PCI config register
 uint32_t pci_read_config(uint32_t bus, uint32_t dev, uint32_t func, uint32_t reg) {
-    uint64_t addr = ECAM_BASE + (bus << 20) + (dev << 15) + (func << 12) + reg;
+    uint64_t addr = PCI_CONFIG_BASE + (bus << 16) + (dev << 11) + (func << 8) + reg;
     return *(volatile uint32_t *)addr;
 }
 
