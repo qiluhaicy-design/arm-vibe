@@ -45,7 +45,7 @@ $(BUILD_DIR)/bootloader.elf: $(BOOTLOADER_DIR)/boot.S $(BOOTLOADER_DIR)/main.c $
 # Build kernel
 kernel: $(BUILD_DIR)/kernel.elf
 
-$(BUILD_DIR)/kernel.elf: $(KERNEL_DIR)/kernel.c $(KERNEL_DIR)/memory.c $(KERNEL_DIR)/timer.c $(KERNEL_DIR)/interrupt.c $(KERNEL_DIR)/scheduler.c $(LIBS_DIR)/uart.c $(DRIVERS_DIR)/framebuffer.c $(KERNEL_DIR)/linker.ld
+$(BUILD_DIR)/kernel.elf: $(KERNEL_DIR)/kernel.c $(KERNEL_DIR)/memory.c $(KERNEL_DIR)/timer.c $(KERNEL_DIR)/interrupt.c $(KERNEL_DIR)/scheduler.c $(LIBS_DIR)/uart.c $(DRIVERS_DIR)/framebuffer.c $(UI_DIR)/window.c $(KERNEL_DIR)/linker.ld
 	@echo "Compiling kernel..."
 	$(CC) -c $(KERNEL_DIR)/kernel.c -o $(BUILD_DIR)/kernel.o
 	$(CC) -c $(KERNEL_DIR)/memory.c -o $(BUILD_DIR)/memory.o
@@ -54,7 +54,8 @@ $(BUILD_DIR)/kernel.elf: $(KERNEL_DIR)/kernel.c $(KERNEL_DIR)/memory.c $(KERNEL_
 	$(CC) -c $(KERNEL_DIR)/scheduler.c -o $(BUILD_DIR)/scheduler.o
 	$(CC) -c $(LIBS_DIR)/uart.c -o $(BUILD_DIR)/uart.o
 	$(CC) -c $(DRIVERS_DIR)/framebuffer.c -o $(BUILD_DIR)/framebuffer.o
-	$(LD) -T $(KERNEL_DIR)/linker.ld $(BUILD_DIR)/kernel.o $(BUILD_DIR)/memory.o $(BUILD_DIR)/timer.o $(BUILD_DIR)/interrupt.o $(BUILD_DIR)/scheduler.o $(BUILD_DIR)/uart.o $(BUILD_DIR)/framebuffer.o -o $(BUILD_DIR)/kernel.elf
+	$(CC) -c $(UI_DIR)/window.c -o $(BUILD_DIR)/window.o
+	$(LD) -T $(KERNEL_DIR)/linker.ld $(BUILD_DIR)/kernel.o $(BUILD_DIR)/memory.o $(BUILD_DIR)/timer.o $(BUILD_DIR)/interrupt.o $(BUILD_DIR)/scheduler.o $(BUILD_DIR)/uart.o $(BUILD_DIR)/framebuffer.o $(BUILD_DIR)/window.o -o $(BUILD_DIR)/kernel.elf
 
 # Run in QEMU ARM64
 run: build
