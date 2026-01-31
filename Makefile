@@ -59,10 +59,10 @@ $(BUILD_DIR)/kernel.elf: $(KERNEL_DIR)/kernel.c $(KERNEL_DIR)/memory.c $(KERNEL_
 	$(CC) -c $(UI_DIR)/window.c -o $(BUILD_DIR)/window.o
 	$(LD) -T $(KERNEL_DIR)/linker.ld $(BUILD_DIR)/kernel.o $(BUILD_DIR)/memory.o $(BUILD_DIR)/timer.o $(BUILD_DIR)/interrupt.o $(BUILD_DIR)/scheduler.o $(BUILD_DIR)/uart.o $(BUILD_DIR)/framebuffer.o $(BUILD_DIR)/virtio_gpu.o $(BUILD_DIR)/window.o -o $(BUILD_DIR)/kernel.elf
 
-# Run in QEMU ARM64 with ramfb
+# Run in QEMU ARM64 with virtio GPU
 run: build
-	@echo "Running vibeOS in QEMU ARM64 with ramfb..."
-	$(QEMU) -M virt -cpu cortex-a53 -kernel $(BUILD_DIR)/bootloader.elf -device ramfb,addr=0x80000000 -serial stdio
+	@echo "Running vibeOS in QEMU ARM64 with virtio GPU..."
+	$(QEMU) -M virt -cpu cortex-a53 -kernel $(BUILD_DIR)/bootloader.elf -device virtio-gpu-pci -vga none -serial stdio
 
 # Clean build artifacts
 clean:
