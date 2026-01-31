@@ -76,7 +76,7 @@ void virtio_gpu_send_command(void *cmd, uint32_t size) {
 
 // Get display info
 void virtio_gpu_get_display_info() {
-    virtio_gpu_get_display_info cmd = {
+    virtio_gpu_cmd_get_display_info cmd = {
         .hdr = { .type = VIRTIO_GPU_CMD_GET_DISPLAY_INFO, .flags = 0, .fence_id = 0, .ctx_id = 0, .padding = 0 }
     };
     virtio_gpu_send_command(&cmd, sizeof(cmd));

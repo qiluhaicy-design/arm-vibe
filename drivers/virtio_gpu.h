@@ -19,7 +19,7 @@ typedef struct {
 // Get display info command
 typedef struct {
     virtio_gpu_ctrl_hdr hdr;
-} virtio_gpu_get_display_info;
+} virtio_gpu_cmd_get_display_info;
 
 // Display info response
 typedef struct {
