@@ -19,7 +19,7 @@ void fb_init() {
     current_buffer = back_buffer;
     uart_puts("Initializing framebuffer...\n");
     // TODO: Set up virtio-gpu or memory mapping
-    fb_clear(COLOR_BLACK);
+    // fb_clear(COLOR_BLACK);  // Skip for now to avoid memory issues
     uart_puts("Framebuffer initialized\n");
 }
 
