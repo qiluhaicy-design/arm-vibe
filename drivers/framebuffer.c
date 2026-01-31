@@ -10,8 +10,14 @@ static uint32_t *current_buffer;
 
 // Initialize framebuffer
 void fb_init() {
-    front_buffer = (uint32_t *)FB_BASE;
-    back_buffer = (uint32_t *)(FB_BASE + FB_SIZE);
+    // Set ramfb parameters for QEMU
+    uint32_t *ramfb_params = (uint32_t *)FB_BASE;
+    ramfb_params[0] = FB_WIDTH;  // width
+    ramfb_params[1] = FB_HEIGHT; // height
+    ramfb_params[2] = FB_WIDTH * 4; // stride (bytes per line)
+
+    front_buffer = (uint32_t *)(FB_BASE + 16); // pixels start after params
+    back_buffer = front_buffer + (FB_WIDTH * FB_HEIGHT);
     current_buffer = back_buffer;
     uart_puts("Initializing framebuffer...\n");
     fb_clear(COLOR_BLACK);

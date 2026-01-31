@@ -62,7 +62,7 @@ $(BUILD_DIR)/kernel.elf: $(KERNEL_DIR)/kernel.c $(KERNEL_DIR)/memory.c $(KERNEL_
 # Run in QEMU ARM64 with ramfb
 run: build
 	@echo "Running vibeOS in QEMU ARM64 with ramfb..."
-	$(QEMU) -M virt -cpu cortex-a53 -kernel $(BUILD_DIR)/bootloader.elf -device ramfb,addr=0x80000000,width=1024,height=768 -serial stdio
+	$(QEMU) -M virt -cpu cortex-a53 -kernel $(BUILD_DIR)/bootloader.elf -device ramfb,addr=0x80000000 -display gtk -serial stdio
 
 # Clean build artifacts
 clean:
