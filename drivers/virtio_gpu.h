@@ -5,32 +5,39 @@
 
 // Define types for bare-metal
 typedef unsigned int uint32_t;
-typedef unsigned long long uint64_t;
 
 // Virtio GPU command header
-typedef struct {
+struct virtio_gpu_ctrl_hdr {
     uint32_t type;
     uint32_t flags;
     uint32_t fence_id; // simplified to uint32_t
     uint32_t ctx_id;
     uint32_t padding;
-} virtio_gpu_ctrl_hdr;
+};
+
+// Set scanout command
+struct virtio_gpu_cmd_set_scanout {
+    struct virtio_gpu_ctrl_hdr hdr;
+    uint32_t r_x, r_y, r_width, r_height;
+    uint32_t scanout_id;
+    uint32_t resource_id;
+};
 
 // Get display info command
-typedef struct {
-    virtio_gpu_ctrl_hdr hdr;
-} virtio_gpu_cmd_get_display_info;
+struct virtio_gpu_cmd_get_display_info {
+    struct virtio_gpu_ctrl_hdr hdr;
+};
 
 // Display info response
-typedef struct {
-    virtio_gpu_ctrl_hdr hdr;
+struct virtio_gpu_resp_display_info {
+    struct virtio_gpu_ctrl_hdr hdr;
     uint32_t num_scanouts;
     struct {
         uint32_t enabled;
         uint32_t flags;
         uint32_t x, y, width, height;
     } pmodes[16];
-} virtio_gpu_resp_display_info;
+};
 
 // Function declarations
 void virtio_gpu_init();
