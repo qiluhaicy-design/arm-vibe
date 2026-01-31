@@ -52,7 +52,6 @@ $(BUILD_DIR)/kernel.elf: $(KERNEL_DIR)/kernel.c $(KERNEL_DIR)/memory.c $(KERNEL_
 	@echo "Compiling kernel..."
 	$(CC) -c $(KERNEL_DIR)/kernel.c -o $(BUILD_DIR)/kernel.o
 	$(CC) -c $(KERNEL_DIR)/memory.c -o $(BUILD_DIR)/memory.o
-	$(CC) -c $(KERNEL_DIR)/timer.c -o $(BUILD_DIR)/memory.o
 	$(CC) -c $(KERNEL_DIR)/timer.c -o $(BUILD_DIR)/timer.o
 	$(CC) -c $(KERNEL_DIR)/interrupt.c -o $(BUILD_DIR)/interrupt.o
 	$(CC) -c $(KERNEL_DIR)/scheduler.c -o $(BUILD_DIR)/scheduler.o
