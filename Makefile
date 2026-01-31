@@ -2,8 +2,8 @@
 # ARM64 modular OS with GUI, desktop/phone modes, ISO install
 
 # Compiler and tools for macOS ARM
-CC = clang -target aarch64-elf
-LD = ld.lld
+CC = aarch64-elf-gcc
+LD = aarch64-elf-ld
 QEMU = qemu-system-aarch64
 
 # Directories
@@ -26,6 +26,7 @@ bootloader: $(BUILD_DIR)/bootloader.elf
 
 $(BUILD_DIR)/bootloader.elf: $(BOOTLOADER_DIR)/boot.S $(BOOTLOADER_DIR)/main.c $(BOOTLOADER_DIR)/linker.ld
 	@echo "Compiling bootloader..."
+	mkdir -p $(BUILD_DIR)
 	$(CC) -c $(BOOTLOADER_DIR)/boot.S -o $(BUILD_DIR)/boot.o
 	$(CC) -c $(BOOTLOADER_DIR)/main.c -o $(BUILD_DIR)/main.o
 	$(LD) -T $(BOOTLOADER_DIR)/linker.ld $(BUILD_DIR)/boot.o $(BUILD_DIR)/main.o -o $(BUILD_DIR)/bootloader.elf
